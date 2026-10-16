@@ -29,12 +29,12 @@
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
-  scroll-padding-top: calc(var(--demo-h) + var(--header-h) + 16px);
 }
 
 .section[id],
 .v2-hero[id] {
-  scroll-margin-top: calc(var(--demo-h) + var(--header-h) + 16px);
+  /* single offset: chrome height + 16px gap, minus section top padding so the H2 lands 16px below the header */
+  scroll-margin-top: calc(var(--demo-h) + var(--header-h) + 16px - 3.25rem);
 }
 
 body {

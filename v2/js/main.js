@@ -10,6 +10,8 @@
   function syncHeaderTop() {
     if (!header) return;
     header.style.top = demoH() + "px";
+    document.documentElement.style.setProperty("--demo-h", demoH() + "px");
+    document.documentElement.style.setProperty("--header-h", header.offsetHeight + "px");
     var spacer = document.querySelector(".header-spacer");
     if (spacer) spacer.style.height = demoH() + header.offsetHeight + "px";
     if (menu) menu.style.top = demoH() + header.offsetHeight + "px";
