@@ -1,0 +1,5 @@
+/* System stack – no webfont files required for this demo */
+:root {
+  --font-display: "Playfair Display", "Times New Roman", Times, Georgia, serif;
+  --font-body: "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
+}
