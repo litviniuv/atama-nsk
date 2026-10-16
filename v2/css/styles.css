@@ -72,11 +72,14 @@ body.v2 .privacy-link-row a { color: rgba(245, 240, 232, 0.55); }
   top: 42%;
   transform: translate(-50%, -50%);
   font-family: var(--font-display);
-  font-size: clamp(4.5rem, 22vw, 14rem);
+  font-size: clamp(3.25rem, 18vw, 14rem);
   font-weight: 700;
   letter-spacing: 0.04em;
   line-height: 0.9;
   margin: 0;
+  max-width: 96vw;
+  overflow: hidden;
+  text-align: center;
   color: transparent;
   background: linear-gradient(180deg, rgba(245,240,232,0.55), rgba(201,168,108,0.35));
   -webkit-background-clip: text;
@@ -124,19 +127,55 @@ body.v2 .privacy-link-row a { color: rgba(245, 240, 232, 0.55); }
   text-shadow: 0 2px 12px rgba(0,0,0,0.5);
 }
 
-/* Circle reveal on section images */
+/* Circle reveal: only when JS marked html.js; otherwise images stay visible */
 .v2-reveal {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+html.js .v2-reveal:not(.is-in):not(.is-done) {
   clip-path: circle(0% at 50% 50%);
   transition: clip-path 0.9s ease;
 }
 
-.v2-reveal.is-in {
+html.js .v2-reveal.is-in {
   clip-path: circle(75% at 50% 50%);
+  transition: clip-path 0.9s ease;
 }
 
+html.js .v2-reveal.is-done,
 .v2-reveal.is-done {
   clip-path: none;
   border-radius: 12px;
+}
+
+.gallery-duo {
+  display: grid;
+  gap: 2rem;
+}
+
+@media (min-width: 900px) {
+  .gallery-duo {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    align-items: start;
+  }
+  .gallery-duo .carousel {
+    max-width: none;
+  }
+}
+
+body.v2 .map-aside-note {
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(201,168,108,0.3);
+  color: rgba(245,240,232,0.8);
+}
+body.v2 .map-aside-note strong { color: var(--gold-bright); }
+
+.v2-hero__inner {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  box-sizing: border-box;
 }
 
 /* Carousel */

@@ -1,5 +1,4 @@
 (function () {
-  // shared menu + map from parent pattern (paths differ)
   var header = document.querySelector(".site-header");
   var demo = document.querySelector(".demo-strip");
   var toggle = document.querySelector(".menu-toggle");
@@ -78,31 +77,55 @@
     });
   }
 
-  // Circle reveal
+  function revealDone(el) {
+    el.classList.add("is-in");
+    el.classList.add("is-done");
+  }
+
+  function revealAnimate(el) {
+    el.classList.add("is-in");
+    var finished = false;
+    function finish() {
+      if (finished) return;
+      finished = true;
+      el.classList.add("is-done");
+      el.removeEventListener("transitionend", onEnd);
+    }
+    function onEnd(e) {
+      if (e.propertyName && e.propertyName.indexOf("clip-path") === -1 && e.propertyName !== "clipPath") return;
+      finish();
+    }
+    el.addEventListener("transitionend", onEnd);
+    setTimeout(finish, 1200);
+  }
+
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var reveals = document.querySelectorAll(".v2-reveal");
-  if (reduce) {
-    reveals.forEach(function (el) { el.classList.add("is-done"); });
-  } else if ("IntersectionObserver" in window) {
+  var reveals = Array.prototype.slice.call(document.querySelectorAll(".v2-reveal"));
+
+  if (reduce || !("IntersectionObserver" in window)) {
+    reveals.forEach(revealDone);
+  } else {
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (!entry.isIntersecting) return;
         var el = entry.target;
-        el.classList.add("is-in");
-        var done = function () {
-          el.classList.add("is-done");
-          el.removeEventListener("transitionend", done);
-        };
-        el.addEventListener("transitionend", done);
+        revealAnimate(el);
         io.unobserve(el);
       });
-    }, { threshold: 0.25 });
+    }, { threshold: 0, rootMargin: "0px 0px -5% 0px" });
     reveals.forEach(function (el) { io.observe(el); });
-  } else {
-    reveals.forEach(function (el) { el.classList.add("is-done"); });
+    // Timeout fallback: nothing stays blank
+    setTimeout(function () {
+      reveals.forEach(function (el) {
+        if (!el.classList.contains("is-done") && !el.classList.contains("is-in")) {
+          revealDone(el);
+        } else if (!el.classList.contains("is-done")) {
+          el.classList.add("is-done");
+        }
+      });
+    }, 2500);
   }
 
-  // Drop curtain after animation so it doesn't block
   var curtain = document.querySelector(".v2-hero__curtain");
   if (curtain) {
     curtain.addEventListener("animationend", function () {
@@ -111,7 +134,6 @@
     if (reduce) curtain.style.display = "none";
   }
 
-  // Carousels
   function initCarousel(root) {
     var track = root.querySelector(".carousel__track");
     var slides = root.querySelectorAll(".carousel__slide");
@@ -149,7 +171,6 @@
     if (prev) prev.addEventListener("click", function () { go(i - 1); });
     if (next) next.addEventListener("click", function () { go(i + 1); });
 
-    // swipe
     var startX = 0;
     var dx = 0;
     var viewport = root.querySelector(".carousel__viewport");
